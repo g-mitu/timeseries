@@ -1,0 +1,59 @@
+# 4种数据结构
+# 元组=Tuple，用圆括号a=(4,5,6)，但值不可修改
+# 列表=List，用方括号a=[4,5,6]，值可修改
+# 字典=Dictionary，映射，用大括号a={'key':v1,'key2':v2},dict(['key',v1],['key2',v2])将列表转化为字典
+# 集合=Set，大括号{}，不重复、不索引，并集、交集、差集—在前一个不在后一个、对称差集—仅在其中一个：|、&、-、^
+# List 允许append(),count(),extend(),insert(),pop()
+
+# 特殊函数：lambda、map、reduce、filter
+b=list(b)
+b=map(lambda x:x+2,a)
+# reduce 递归计算
+# filter 挑选
+filter(lambda x:x>5 and x<8,range(10))
+# 2个计算导入库
+# numpy=数组 np.array([])
+# Scipy=矩阵 最优化、线性代数、积分、插值、拟合、特殊函数、快速傅里叶变换、常微分求解
+from scipy.optimize import fsolve #矩阵解方程组
+from scipy import integrate #积分
+
+# 1个画图导入库
+# matplotlib.org/gallery.html
+import matplotlib.pyplot as plt
+x =
+y =
+z =
+plt.figure(figsize=(8,4))
+plt.plot(x,y,label = ,color=,linewidth=)
+plt.plot(x,z,'b--',label=)
+plt.xlabel('')
+plt.ylabel('')
+plt.title('')
+plt.ylim(0,5)
+plt.legend()
+plt.show()
+
+# pandas
+import pandas as pd
+s=pd.Series([],index=[])  #生成序列
+pd.DataFrame([],[],columns=[]) #生成表
+pd.DataFrame(s)      #序列转表
+pd.read_csv('.csv',encoding='utf-8')
+pd.read_excel('.xls')
+pd.read_json()
+
+# StatsModels 统计建模分析
+from statsmodels.tsa.stattools import adfuller as ADF
+ADF(np.random.rand(100))
+
+# Scikit-Learn  #机器学习
+model.fit(X,y) # 监督学习
+model.fit(X)   # 非监督学习
+model.predict(X_new) # 监督学习预测
+model.predict_proba(X_new) # 监督学习预测概率
+model.score() #监督学习得分越高，fit越好
+model.transform() # 非监督学习
+model.fit_transform()
+
+#kera 神经网络模型
+#gensim 人类语言建模
