@@ -1,0 +1,4 @@
+import pandas as pd
+
+a=pd.DataFrame(pd.date_range("2022-2-14 0:0:02","2022-2-15 23:59:58",freq='2S'))
+a.to_csv("time.csv")
