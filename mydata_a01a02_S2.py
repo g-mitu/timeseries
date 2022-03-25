@@ -3,9 +3,18 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from time import *
+from pandas.plotting import scatter_matrix
 
+# def Scatter plot matrix画图：矩阵图:
+def matrixplot(df1):
+    plt.rcParams["font.sans-serif"] = ["SimHei"]  # 用来正常显示中文标签
+    plt.rcParams["axes.unicode_minus"] = False  # 用来正常显示负号
+    #sample: df = DataFrame(randn(1000, 4), columns=['a', 'b', 'c', 'd'])
+    df = df1.drop(columns=["Date","状态"])
+    pd.plotting.scatter_matrix(df, figsize=(12, 8))
+    #scatter_matrix(df, alpha=0.2, figsize=(6, 6), diagonal='kde')
+    plt.show()
 
-# from pandas.plotting import scatter_matrix
 # def 时间对齐：
 def align(a,df_temp,x,cname,dfname):
     res_t = pd.DataFrame()
@@ -23,6 +32,24 @@ def align(a,df_temp,x,cname,dfname):
     df.columns = cname
     # 输出到xlsx文件
     df.to_excel(f"{workdir}/baseline_"+dfname+"_ok.xlsx")
+    return df
+    
+    
+# def 分割,时间resample：
+def resampletime(df1):
+    # 以datetime形式将字符串拆分为日期和时间
+    date2 = pd.to_datetime(df1["Date"], errors="coerce")  # 方便人查看
+    df7 = df1.copy()  
+    df6 = df7.drop[["状态"]]
+    df6['Hour'] = date2.dt.hour  #按照时间分类
+    df5 = df6.set_index("Date", drop=False) #时间索引，同时保留
+    df4 = df5.sort_index(ascending=True)
+    print("Line 40#", df4.head())
+    a = df4.tail(1)                                #保留最后一行，pd.concat([df.head(1), df.tail(1)])
+    t = df4.resample('H', on='Date').min() #按小时重新采样，取最左边一个（小）值,.max.sum()return NEW dataframe
+    df3 = pd.concat([t, a])                        #最后一行补上
+    df2 = df3.diff()
+    df = df2.fillna(0)  #
     return df
     
     
@@ -47,6 +74,8 @@ def stopT(df):
     df2 = df2.diff()
     df2 = df2.fillna(0)  #
     return df2
+    
+    
     
 # def 换班，默认按天分析：
 def shiftsplit(df1,str,str1):
@@ -147,6 +176,24 @@ def subplotXY(df,sty="-",pt=None):
     plt.ylabel("Value")
     plt.show()
     
+    
+#def 散点图，相关关系：(Y=LDS，x1=停机次数，x2=车速，x3=剔除)
+def relationplot(df):
+    plt.rcParams["font.sans-serif"] = ["SimHei"]  # 用来正常显示中文标签
+    plt.rcParams["axes.unicode_minus"] = False  # 用来正常显示负号
+#数据已经cumsum()
+    df1 = df[["车速","LDS空头"]]
+    df1.plot(x='车速', y='LDS空头')
+    df1.plot.scatter(x="车速", y="LDS空头")
+#    df1 = df[["车速","停次","LDS空头"]]
+#    ax = df1.plot.scatter(x="车速", y="LDS空头", color="DarkBlue", label="Group 1")
+#    df.plot.scatter(x="c", y="d", color="DarkGreen", label="Group 2", ax=ax);
+#
+    plt.legend(loc='best')
+    plt.title("相关性") #result：通过pt传参设置标题
+    plt.xlabel("2s-index-Date")
+    plt.ylabel("Value")
+    plt.show()
 
 #----------------BEGIN
 program_begin = time()
@@ -175,6 +222,11 @@ sameY(df_a01_1418,df_a02_1418)
 subplotXY(df_a01_1418,".")
 #---------------------
 #单独分析A02
+#数据，天、班
 df3 = shiftsplit(df_a02_1418,None,"2022-03-18")
+#5联图
 subplotXY(df3,".","A02状态")
-
+#矩阵图
+#matrixplot(df_a02_1418)
+#关联图，点图
+relationplot(df_a02_1418)
